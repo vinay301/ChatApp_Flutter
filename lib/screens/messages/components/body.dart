@@ -6,8 +6,11 @@ class Body extends StatelessWidget {
   const Body({super.key});
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [const Spacer(), ChatInputField()],
+    return const Column(
+      children: [ 
+      Spacer(), 
+      Text('All your messages will be rendered here'),
+      ChatInputField()],
     );
   }
 }
