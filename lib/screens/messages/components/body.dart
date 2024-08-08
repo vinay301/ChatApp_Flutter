@@ -6,7 +6,8 @@ import 'package:chat_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class Body extends StatelessWidget {
-  const Body({super.key});
+  Body({super.key});
+  final chatController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -21,7 +22,9 @@ class Body extends StatelessWidget {
           ),
         ),
       ),
-      ChatInputField(),
+      ChatInputField(
+        chatController: chatController,
+      ),
     ]);
   }
 }

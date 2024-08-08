@@ -3,14 +3,15 @@ import 'package:chat_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class Messagescreen extends StatelessWidget {
-  const Messagescreen({super.key});
+  final String username;
+  const Messagescreen({super.key, required this.username});
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     //double statusBarHeight = MediaQuery.of(context).padding.top;
     return Scaffold(
       appBar: BuildAppBar(size),
-      body: const Body(),
+      body: Body(),
     );
   }
 
@@ -36,7 +37,7 @@ class Messagescreen extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Username',
+                Text(username,
                     style: TextStyle(color: Colors.white, fontSize: 18)),
                 Text('Online',
                     style: TextStyle(

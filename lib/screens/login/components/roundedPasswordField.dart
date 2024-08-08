@@ -4,12 +4,26 @@ import 'package:flutter/material.dart';
 
 class RoundedPasswordField extends StatelessWidget {
   final ValueChanged<String> onChanged;
-  const RoundedPasswordField({super.key, required this.onChanged});
+  final TextEditingController passwordController;
+  const RoundedPasswordField({
+    super.key,
+    required this.onChanged,
+    required this.passwordController,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextFieldContainer(
-        child: TextField(
+        child: TextFormField(
+      validator: (value) {
+        if (value != null && value.isNotEmpty && value.length < 5) {
+          return "Your password should be more than 5 characters";
+        } else if (value != null && value.isEmpty) {
+          return "Please type your password";
+        }
+        return null;
+      },
+      controller: passwordController,
       obscureText: true,
       onChanged: onChanged,
       decoration: const InputDecoration(

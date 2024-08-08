@@ -2,12 +2,15 @@ import 'package:chat_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class ChatInputField extends StatelessWidget {
-  const ChatInputField({
-    super.key,
-  });
+  final TextEditingController chatController;
+  const ChatInputField({super.key, required this.chatController});
 
   @override
   Widget build(BuildContext context) {
+    void onMsgSend() {
+      print(chatController.text);
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(
           horizontal: defaultPadding, vertical: defaultPadding / 2),
@@ -22,11 +25,12 @@ class ChatInputField extends StatelessWidget {
       child: SafeArea(
         child: Row(
           children: [
-            Icon(Icons.mic, color: primaryColor),
-            SizedBox(width: defaultPadding),
+            const Icon(Icons.mic, color: primaryColor),
+            const SizedBox(width: defaultPadding),
             Expanded(
                 child: Container(
-              padding: EdgeInsets.symmetric(horizontal: defaultPadding * 0.75),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: defaultPadding * 0.75),
               height: 50,
               decoration: BoxDecoration(
                 color: primaryColor.withOpacity(0.05),
@@ -34,15 +38,22 @@ class ChatInputField extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.sentiment_satisfied_alt_outlined),
-                  SizedBox(width: defaultPadding / 4),
+                  const Icon(Icons.sentiment_satisfied_alt_outlined),
+                  const SizedBox(width: defaultPadding / 4),
                   Expanded(
                     child: TextField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 5,
+                      minLines: 1,
+                      controller: chatController,
                       decoration: InputDecoration(
                           hintText: "Type message", border: InputBorder.none),
                     ),
                   ),
-                  Icon(Icons.attach_file),
+                  IconButton(
+                    onPressed: onMsgSend,
+                    icon: Icon(Icons.attach_file),
+                  ),
                   SizedBox(width: defaultPadding / 4),
                   Icon(Icons.camera_alt_outlined)
                 ],
