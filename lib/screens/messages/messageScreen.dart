@@ -9,9 +9,12 @@ class Messagescreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     //double statusBarHeight = MediaQuery.of(context).padding.top;
-    return Scaffold(
-      appBar: BuildAppBar(size),
-      body: Body(),
+    return SafeArea(
+      top: true,
+      child: Scaffold(
+        appBar: BuildAppBar(size),
+        body: Body(),
+      ),
     );
   }
 
@@ -19,33 +22,29 @@ class Messagescreen extends StatelessWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       toolbarHeight: size.height * 0.12,
-      title: SafeArea(
-        top: true,
-        bottom: false,
-        child: Row(
-          children: [
-            const BackButton(
-              color: Colors.white,
-            ),
-            const SizedBox(width: 10),
-            const CircleAvatar(
-              backgroundColor: Colors.white,
-              radius: 20,
-              child: Icon(Icons.person, color: primaryColor),
-            ),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(username,
-                    style: TextStyle(color: Colors.white, fontSize: 18)),
-                Text('Online',
-                    style: TextStyle(
-                        color: Colors.white.withOpacity(0.7), fontSize: 14))
-              ],
-            ),
-          ],
-        ),
+      title: Row(
+        children: [
+          const BackButton(
+            color: Colors.white,
+          ),
+          const SizedBox(width: 10),
+          const CircleAvatar(
+            backgroundColor: Colors.white,
+            radius: 20,
+            child: Icon(Icons.person, color: primaryColor),
+          ),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(username,
+                  style: TextStyle(color: Colors.white, fontSize: 18)),
+              Text('Online',
+                  style: TextStyle(
+                      color: Colors.white.withOpacity(0.7), fontSize: 14))
+            ],
+          ),
+        ],
       ),
       backgroundColor: primaryColor,
     );

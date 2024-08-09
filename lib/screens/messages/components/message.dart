@@ -11,6 +11,7 @@ class Message extends StatelessWidget {
   const Message({super.key, required this.message});
 
   final ChatMessage message;
+
   @override
   Widget build(BuildContext context) {
     Widget messageContent(ChatMessage message) {

@@ -5,9 +5,21 @@ import 'package:chat_app/screens/messages/components/textMessage.dart';
 import 'package:chat_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   Body({super.key});
+
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
   final chatController = TextEditingController();
+
+  void onMessageSent(ChatMessage newChatMessage) {
+    demoChatMessages.add(newChatMessage);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -24,6 +36,7 @@ class Body extends StatelessWidget {
       ),
       ChatInputField(
         chatController: chatController,
+        onChatSubmit: onMessageSent,
       ),
     ]);
   }

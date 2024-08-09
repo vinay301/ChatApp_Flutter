@@ -1,14 +1,24 @@
+import 'package:chat_app/models/ChatMessage.dart';
 import 'package:chat_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class ChatInputField extends StatelessWidget {
   final TextEditingController chatController;
-  const ChatInputField({super.key, required this.chatController});
+  final Function(ChatMessage) onChatSubmit;
+  const ChatInputField(
+      {super.key, required this.chatController, required this.onChatSubmit});
 
   @override
   Widget build(BuildContext context) {
     void onMsgSend() {
       print(chatController.text);
+
+      final newMessage = ChatMessage(
+          text: chatController.text,
+          messageType: ChatMessageType.text,
+          messageStatus: MessageStatus.not_view,
+          isSender: true);
+      onChatSubmit(newMessage);
     }
 
     return Container(
