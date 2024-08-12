@@ -40,14 +40,14 @@ class Message extends StatelessWidget {
             message.isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
           if (!message.isSender) ...[
-            CircleAvatar(
+            const CircleAvatar(
               radius: 12,
               child: Icon(
                 Icons.person,
                 size: 16,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: defaultPadding / 2,
             )
           ],

@@ -12,13 +12,13 @@ class Messagescreen extends StatelessWidget {
     return SafeArea(
       top: true,
       child: Scaffold(
-        appBar: BuildAppBar(size),
+        appBar: buildAppBar(size),
         body: Body(),
       ),
     );
   }
 
-  AppBar BuildAppBar(Size size) {
+  AppBar buildAppBar(Size size) {
     return AppBar(
       automaticallyImplyLeading: false,
       toolbarHeight: size.height * 0.12,
@@ -38,7 +38,7 @@ class Messagescreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(username,
-                  style: TextStyle(color: Colors.white, fontSize: 18)),
+                  style: const TextStyle(color: Colors.white, fontSize: 18)),
               Text('Online',
                   style: TextStyle(
                       color: Colors.white.withOpacity(0.7), fontSize: 14))
