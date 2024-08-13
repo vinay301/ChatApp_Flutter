@@ -3,16 +3,18 @@ enum ChatMessageType { text, audio, image, video }
 enum MessageStatus { not_Sent, not_view, viewed }
 
 class ChatMessage {
-  final String text;
-  final ChatMessageType messageType;
-  final MessageStatus messageStatus;
+  String text;
+  ChatMessageType messageType;
+  MessageStatus messageStatus;
   final bool isSender;
+  String? imageUrl;
 
   ChatMessage(
       {required this.text,
       required this.messageType,
       required this.messageStatus,
-      required this.isSender});
+      required this.isSender,
+      this.imageUrl});
 }
 
 List demoChatMessages = [

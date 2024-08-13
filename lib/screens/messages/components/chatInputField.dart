@@ -4,27 +4,53 @@ import 'package:chat_app/utils/constants.dart';
 import 'package:chat_app/widget/image_picker_body.dart';
 import 'package:flutter/material.dart';
 
-class ChatInputField extends StatelessWidget {
+class ChatInputField extends StatefulWidget {
   final TextEditingController chatController;
   final Function(ChatMessage) onChatSubmit;
   final Future<List<PixabayImage>> Function() getNetworkImages;
+
   const ChatInputField(
       {super.key,
       required this.chatController,
       required this.onChatSubmit,
       required this.getNetworkImages});
+
+  @override
+  State<ChatInputField> createState() => _ChatInputFieldState();
+}
+
+class _ChatInputFieldState extends State<ChatInputField> {
+  String _selectedImageUrl = '';
+
   void onMsgSend() {
     //print(chatController.text);
 
     final newMessage = ChatMessage(
-        text: chatController.text,
-        messageType: ChatMessageType.text,
+        text: widget.chatController.text,
+        messageType: _selectedImageUrl.isNotEmpty
+            ? ChatMessageType.image
+            : ChatMessageType.text,
         messageStatus: MessageStatus.not_view,
+        imageUrl: _selectedImageUrl.isNotEmpty ? _selectedImageUrl : null,
         isSender: true);
-    onChatSubmit(newMessage);
+
+    // if (_selectedImageUrl.isNotEmpty) {
+    //   newMessage.imageUrl = _selectedImageUrl;
+    //   newMessage.messageType = ChatMessageType.image;
+    // }
+    widget.onChatSubmit(newMessage);
+    widget.chatController.clear();
+    _selectedImageUrl = '';
+    setState(() {});
   }
 
-  onImagePicked(String newImageUrl) {}
+  onImagePicked(String newImageUrl) {
+    setState(() {
+      _selectedImageUrl = newImageUrl;
+    });
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,7 +73,7 @@ class ChatInputField extends StatelessWidget {
                 child: Container(
               padding:
                   const EdgeInsets.symmetric(horizontal: defaultPadding * 0.75),
-              height: 50,
+              //height: 50,
               decoration: BoxDecoration(
                 color: primaryColor.withOpacity(0.05),
                 borderRadius: BorderRadius.circular(40),
@@ -57,13 +83,21 @@ class ChatInputField extends StatelessWidget {
                   const Icon(Icons.sentiment_satisfied_alt_outlined),
                   const SizedBox(width: defaultPadding / 4),
                   Expanded(
-                    child: TextField(
-                      keyboardType: TextInputType.multiline,
-                      maxLines: 5,
-                      minLines: 1,
-                      controller: chatController,
-                      decoration: const InputDecoration(
-                          hintText: "Type message", border: InputBorder.none),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 5,
+                          minLines: 1,
+                          controller: widget.chatController,
+                          decoration: const InputDecoration(
+                              hintText: "Type message",
+                              border: InputBorder.none),
+                        ),
+                        if (_selectedImageUrl.isNotEmpty)
+                          Image.network(_selectedImageUrl, height: 50)
+                      ],
                     ),
                   ),
                   IconButton(
@@ -77,7 +111,7 @@ class ChatInputField extends StatelessWidget {
                             context: context,
                             builder: (BuildContext context) {
                               return NetworkImagePickerBody(
-                                  getNetworkImages: getNetworkImages,
+                                  getNetworkImages: widget.getNetworkImages,
                                   onImageSelected: onImagePicked);
                             });
                       },

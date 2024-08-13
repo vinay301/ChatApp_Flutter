@@ -16,9 +16,10 @@ class ImageMessage extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset("assets/images/login.png"),
-            ),
+                borderRadius: BorderRadius.circular(8),
+                child: message.imageUrl != null && message.imageUrl!.isNotEmpty
+                    ? Image.network(message.imageUrl!)
+                    : Image.asset("assets/images/login.png")),
           ],
         ),
       ),

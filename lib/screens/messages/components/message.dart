@@ -1,5 +1,6 @@
 import 'package:chat_app/models/ChatMessage.dart';
 import 'package:chat_app/screens/messages/components/audioMessage.dart';
+import 'package:chat_app/screens/messages/components/combinedMessage.dart';
 import 'package:chat_app/screens/messages/components/imageMessage.dart';
 import 'package:chat_app/screens/messages/components/messageDot.dart';
 import 'package:chat_app/screens/messages/components/textMessage.dart';
@@ -8,28 +9,33 @@ import 'package:chat_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class Message extends StatelessWidget {
-  const Message({super.key, required this.message});
-
+  const Message({super.key, required this.message, this.selectedImageUrl});
+  final String? selectedImageUrl;
   final ChatMessage message;
 
   @override
   Widget build(BuildContext context) {
     Widget messageContent(ChatMessage message) {
-      switch (message.messageType) {
-        case ChatMessageType.text:
-          return TextMessage(message: message);
-          break;
-        case ChatMessageType.audio:
-          return AudioMessage(message: message);
-          break;
-        case ChatMessageType.video:
-          return VideoMessage(message: message);
-          break;
-        case ChatMessageType.image:
-          return ImageMessage(message: message);
-          break;
-        default:
-          return SizedBox();
+      if (message.messageType == ChatMessageType.image &&
+          message.text.isNotEmpty) {
+        return CombinedMessage(message: message);
+      } else {
+        switch (message.messageType) {
+          case ChatMessageType.text:
+            return TextMessage(message: message);
+            break;
+          case ChatMessageType.audio:
+            return AudioMessage(message: message);
+            break;
+          case ChatMessageType.video:
+            return VideoMessage(message: message);
+            break;
+          case ChatMessageType.image:
+            return ImageMessage(message: message);
+            break;
+          default:
+            return SizedBox();
+        }
       }
     }
 
