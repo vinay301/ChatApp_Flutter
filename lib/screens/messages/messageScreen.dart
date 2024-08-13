@@ -1,11 +1,33 @@
-import 'package:chat_app/repository/image_repo.dart';
 import 'package:chat_app/screens/messages/components/body.dart';
+import 'package:chat_app/services/auth_service.dart';
 import 'package:chat_app/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class Messagescreen extends StatelessWidget {
+class Messagescreen extends StatefulWidget {
   final String username;
   const Messagescreen({super.key, required this.username});
+
+  @override
+  State<Messagescreen> createState() => _MessagescreenState();
+}
+
+class _MessagescreenState extends State<Messagescreen> {
+  String? userNameFromCache;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserName();
+  }
+
+  Future<void> _fetchUserName() async {
+    final userName = await context.read<AuthService>().getUserName();
+    setState(() {
+      userNameFromCache = userName;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -13,13 +35,13 @@ class Messagescreen extends StatelessWidget {
     return SafeArea(
       top: true,
       child: Scaffold(
-        appBar: buildAppBar(size),
-        body: Body(),
+        appBar: buildAppBar(size, context),
+        body: const Body(),
       ),
     );
   }
 
-  AppBar buildAppBar(Size size) {
+  AppBar buildAppBar(Size size, BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
       toolbarHeight: size.height * 0.12,
@@ -38,7 +60,7 @@ class Messagescreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(username,
+              Text(userNameFromCache!,
                   style: const TextStyle(color: Colors.white, fontSize: 18)),
               Text('Online',
                   style: TextStyle(

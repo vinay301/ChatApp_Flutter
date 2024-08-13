@@ -2,8 +2,10 @@ import 'package:chat_app/screens/login/components/background.dart';
 import 'package:chat_app/screens/login/components/roundedInputField.dart';
 import 'package:chat_app/screens/login/components/roundedPasswordField.dart';
 import 'package:chat_app/screens/messages/messageScreen.dart';
+import 'package:chat_app/services/auth_service.dart';
 import 'package:chat_app/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Body extends StatelessWidget {
   Body({super.key});
@@ -12,17 +14,19 @@ class Body extends StatelessWidget {
   final passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  void loginUser(context) {
+  Future<void> loginUser(BuildContext context) async {
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-      print(userEmailController.text);
-      print(passwordController.text);
+      //print(userEmailController.text);
+      //print(passwordController.text);
+
+      await context.read<AuthService>().loginUser(userEmailController.text);
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return Messagescreen(
           username: userEmailController.text,
         );
       }));
     } else {
-      print('Login Failed!');
+      throw Exception('Login Failed!');
     }
   }
 
@@ -58,8 +62,8 @@ class Body extends StatelessWidget {
               margin: const EdgeInsets.symmetric(vertical: 10),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               child: ElevatedButton(
-                  onPressed: () {
-                    loginUser(context);
+                  onPressed: () async {
+                    await loginUser(context);
                   },
                   // onPressed: () {
                   //   Navigator.push(context, MaterialPageRoute(builder: (context) {
