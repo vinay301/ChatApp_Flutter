@@ -1,5 +1,6 @@
 import 'package:chat_app/models/ChatMessage.dart';
 import 'package:chat_app/models/image_model.dart';
+import 'package:chat_app/repository/image_repo.dart';
 import 'package:chat_app/screens/messages/components/chatInputField.dart';
 import 'package:chat_app/screens/messages/components/message.dart';
 import 'package:chat_app/screens/messages/components/textMessage.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class Body extends StatefulWidget {
-  Body({super.key});
+  const Body({super.key});
 
   @override
   State<Body> createState() => _BodyState();
@@ -16,8 +17,9 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   final chatController = TextEditingController();
-  final PixabayApi api = PixabayApi();
-  List<PixabayImage> images = [];
+  // final PixabayApi api = PixabayApi();
+  //List<PixabayImage> images = [];
+  final ImageRepository _imageRepository = ImageRepository();
   // late Future<List<PixelFormImage>> imageResponse;
 
   void onMessageSent(ChatMessage newChatMessage) {
@@ -25,36 +27,19 @@ class _BodyState extends State<Body> {
     setState(() {});
   }
 
-  _getNetworkImages() async {
-    var endpoint = PixabayApi();
+  Future<List<PixabayImage>> _getNetworkImages() async {
     try {
-      List<PixabayImage> images = await endpoint.fetchImages();
-      return images;
-      //print(images[0].previewURL);
-      // for (var image in images) {
-      //   print('Image URL: ${image.previewURL}');
-      // }
+      List<PixabayImage> imageResponse = await _imageRepository.fetchImages();
+      return imageResponse;
     } catch (e) {
-      print('Error fetching images: $e');
+      throw Exception('Error fetching images: $e');
     }
   }
 
-  // Future<void> _getNetworkImages() async {
-  //   try {
-  //     List<PixabayImage> imageResponse = await api.fetchImages('');
-  //     setState(() {
-  //       images = imageResponse;
-  //     });
-  //   } catch (error) {
-  //     print('Error fetching images: $error');
-  //   }
-  // }
-
   @override
   void initState() {
-    // TODO: implement initState
-    _getNetworkImages();
     super.initState();
+    _getNetworkImages();
   }
 
   @override
@@ -73,9 +58,9 @@ class _BodyState extends State<Body> {
         ),
       ),
       ChatInputField(
-        chatController: chatController,
-        onChatSubmit: onMessageSent,
-      ),
+          chatController: chatController,
+          onChatSubmit: onMessageSent,
+          getNetworkImages: _getNetworkImages),
     ]);
   }
 }
