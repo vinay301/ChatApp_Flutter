@@ -1,24 +1,35 @@
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthService {
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+class AuthService extends ChangeNotifier {
+  static init() async {
+    _prefs = await SharedPreferences.getInstance();
+  }
+
+  static late final SharedPreferences _prefs;
 
   Future<void> loginUser(String userName) async {
     try {
-      SharedPreferences sharedPrefs = await _prefs;
-      sharedPrefs.setString('username', userName);
+      _prefs.setString('username', userName);
     } catch (e) {
-      print(e);
+      throw Exception(e);
     }
   }
 
-  void logoutUser() async {
-    SharedPreferences sharedPrefs = await _prefs;
-    sharedPrefs.clear();
+  void logoutUser() {
+    _prefs.clear();
   }
 
-  Future<String?> getUserName() async {
-    SharedPreferences sharedPrefs = await _prefs;
-    return sharedPrefs.getString('username') ?? 'DefaultUsername';
+  String? getUserName() {
+    return _prefs.getString('username') ?? 'DefaultUsername';
+  }
+
+  Future<bool> isLoggedIn() async {
+    return _prefs.containsKey('username');
+  }
+
+  void updateUserName(String newUserName) {
+    _prefs.setString('username', newUserName);
+    notifyListeners();
   }
 }

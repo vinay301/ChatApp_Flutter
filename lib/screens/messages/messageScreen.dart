@@ -22,7 +22,7 @@ class _MessagescreenState extends State<Messagescreen> {
   }
 
   Future<void> _fetchUserName() async {
-    final userName = await context.read<AuthService>().getUserName();
+    final userName = context.read<AuthService>().getUserName();
     setState(() {
       userNameFromCache = userName;
     });
@@ -42,6 +42,7 @@ class _MessagescreenState extends State<Messagescreen> {
   }
 
   AppBar buildAppBar(Size size, BuildContext context) {
+    userNameFromCache = context.watch<AuthService>().getUserName();
     return AppBar(
       automaticallyImplyLeading: false,
       toolbarHeight: size.height * 0.12,
@@ -60,8 +61,21 @@ class _MessagescreenState extends State<Messagescreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(userNameFromCache!,
-                  style: const TextStyle(color: Colors.white, fontSize: 18)),
+              Row(
+                children: [
+                  Text(userNameFromCache!,
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 18)),
+                  IconButton(
+                    onPressed: () {
+                      context
+                          .read<AuthService>()
+                          .updateUserName('Updated User');
+                    },
+                    icon: const Icon(Icons.edit, color: Colors.white),
+                  )
+                ],
+              ),
               Text('Online',
                   style: TextStyle(
                       color: Colors.white.withOpacity(0.7), fontSize: 14))
@@ -70,6 +84,17 @@ class _MessagescreenState extends State<Messagescreen> {
         ],
       ),
       backgroundColor: primaryColor,
+      actions: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: IconButton(
+              onPressed: () {
+                context.read<AuthService>().logoutUser();
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.logout, color: Colors.white)),
+        )
+      ],
     );
   }
 }
